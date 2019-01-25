@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\Services\Shell\Contracts\Shell;
+use App\Services\Secrets\Contracts\Secrets;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
@@ -13,7 +14,7 @@ class Receive extends Command
      *
      * @var string
      */
-    protected $signature = 'receive {file}';
+    protected $signature = 'receive {name}';
 
     /**
      * The description of the command.
@@ -27,10 +28,10 @@ class Receive extends Command
      *
      * @return mixed
      */
-    public function handle(Shell $shell)
+    public function handle(Shell $shell, Secrets $secrets)
     {
-        $this->notify("New secret received", $this->argument('file'));
+        $this->notify("New secret received", $this->argument('name'));
 
-        $shell->execute("open ~/.share/secrets/".$this->argument('file'));
+        $secrets->find($this->argument('name'))->copyToClipboard();
     }
 }
