@@ -1,37 +1,65 @@
-<p align="center">
-    <img title="Laravel Zero" height="100" src="https://raw.githubusercontent.com/laravel-zero/docs/master/images/logo/laravel-zero-readme.png" />
-</p>
+# Share
+<h4>A command line tool to easily share text between mac users</h4>
 
-<p align="center">
-  <a href="https://travis-ci.org/laravel-zero/framework"><img src="https://img.shields.io/travis/laravel-zero/framework/stable.svg" alt="Build Status"></img></a>
-  <a href="https://scrutinizer-ci.com/g/laravel-zero/framework"><img src="https://img.shields.io/scrutinizer/g/laravel-zero/framework.svg" alt="Quality Score"></img></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://poser.pugx.org/laravel-zero/framework/d/total.svg" alt="Total Downloads"></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://poser.pugx.org/laravel-zero/framework/v/stable.svg" alt="Latest Stable Version"></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://poser.pugx.org/laravel-zero/framework/license.svg" alt="License"></a>
-</p>
+Share was inspired by a teammate who asked me to send over a password. I didn't really want to text it to him, and putting it in a file and scp'ing it over sounded like too much work. Share is basically a wrapper around scp and ssh. I remember there was a utility that did this featured on [Hacker News](https://news.ycombinator.com/) but I didn't save the link and I couldn't find it with The Google. If anyone knows what I'm talking about let me know in the issues :)
 
-<h4> <center>This is a <bold>community project</bold> and not an official Laravel one </center></h4>
-
-Laravel Zero was created by, and is maintained by [Nuno Maduro](https://github.com/nunomaduro), and is a micro-framework that provides an elegant starting point for your console application. It is an **unofficial** and customized version of Laravel optimized for building command-line applications.
-
-- Built on top of the [Laravel](https://laravel.com) components.
-- Optional installation of Laravel [Eloquent](http://laravel-zero.com/#/?id=database), Laravel [Logging](http://laravel-zero.com/#/?id=log) and many others.
-- Supports interactive [menus](http://laravel-zero.com/#/?id=interactive-menus) and [desktop notifications](http://laravel-zero.com/#/?id=desktop-notifications) on Linux, Windows & MacOS.
-- Ships with a [Scheduler](http://laravel-zero.com/#/?id=scheduler) and a [Standalone Compiler](http://laravel-zero.com/#/?id=build-a-standalone-application).
-- Integration with [Collision](https://github.com/nunomaduro/collision) - Beautiful error reporting
+- Built on top of the [Laravel](https://laravel.com) components using Laravel Zero
+- Currently only tested and used on a Mac.
 
 ------
 
 ## Documentation
 
-For full documentation, visit [laravel-zero.com](http://laravel-zero.com/).
+## Prereqs
+Because Share is built around ssh it will prompt for your teammates computer's password. To avoid this I recommend sharing one another's public keys.
+You can place the contents of your teammates public key into your `~/.ssh/authorized_keys` file. If the file does't already exist, you can create it.
 
-## Support the development
-**Do you like this project? Support it by donating**
+## Instalation
+Clone the project from github and cd into the directory.
+Run
+`php share app:build`
+./builds/share is the compiled phar file. At the moment, in order for share to work correctly you need to copy that into your `/usr/local/bin/` directory.
 
-- PayPal: [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66BYDWAT92N6L)
-- Patreon: [Donate](https://www.patreon.com/nunomaduro)
+## Initialization
+Before using share you will need to execute:
+`share init`
 
+This sets up the nessesary directories. (TODO: Remove the need for this command)
+
+## Usage
+At any time you can run `share` to see the version of share and all of the commands that share takes.
+
+You will first need to add your teammates computer addresses. You can do this with the `hosts` command.
+`share hosts:add jim jim@ipaddress`
+
+You can check all of your hosts with
+`share hosts:list`
+
+You can remove a host with
+`share hosts:remove jim`
+
+Once you have a teammate entered sending text is easy.
+`share secret:with jim mySuperSecret`
+Jim will now have mySuperSecret in his clipboard.
+
+You can also send files using the --file flag or (-F)
+`share secret:with jim /path/to/file.txt --file`
+
+You can list all of your received secrets with
+`share secrets:list`
+
+You can remove a secret by referencing the name to a secret from the `share secrets:list` command.
+`share secrets:remove TheSeecretName`
+
+## TODO
+- Remove the need for the init command. This really just creates directories that should be created as they are needed as opposed to being created upfront with the init command.
+- Since the inspiration for this project was to send passwords between teammates the `share secret:with` command should not take the secret inline.
+This puts the secret into the shell's history. Instead we should prompt for the secret.
+- All secrets are stored in plane text inside the ~/.share/secrets directory. The files in this directory should be encrypted with a user defined password.
+- We'll also want to have password managment commands like set password and reset password.
+- Fix the `--file` option so that it can accept absolute directory refrences. As of now you must specify a file relative to your current working directory.
+- Add a preferences command. I can think of one preference which is automatically copy to clipboard (YES|NO).
+- Update the send command so that the share phar file doesn't have to be located at /usr/local/bin. I suspect this has something to do with the bash_profile not loading when executing scripts via ssh.
 ## License
 
-Laravel Zero is an open-source software licensed under the [MIT license](https://github.com/laravel-zero/laravel-zero/blob/stable/LICENSE.md).
+Share is an open-source software licensed under the [MIT license](https://github.com/laravel-zero/laravel-zero/blob/stable/LICENSE.md).
