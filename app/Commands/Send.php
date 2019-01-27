@@ -18,7 +18,7 @@ class Send extends Command
      *
      * @var string
      */
-    protected $signature = 'secret:with {alias} {content} {--file}';
+    protected $signature = 'secret:with {alias} {--file}';
 
     /**
      * The description of the command.
@@ -51,26 +51,28 @@ class Send extends Command
      */
     public function handle(Hosts $hosts)
     {
-        if (! $this->validate()) {
+        $input = $this->secret('What would you like to share with ' . $this->argument('alias'));
+
+        if (! $this->validate($input)) {
             return;
         }
 
         $this->info(
-            'Sending'. ($this->option('file') ? ' contents of file ' . $this->argument('content') : ' inline secret') . '...'
+            'Sending'. ($this->option('file') ? ' contents of ifile ' . $input : ' secret') . '...'
         );
         
         $name = $this->sendSecret(
-            $this->getContent(),
+            $this->getContent($input),
             $hosts->find($this->argument('alias'))
         );
 
         $this->info('Sent ' . $name . ' ' . Emoji::rocket());
     }
 
-    public function validate()
+    public function validate($input)
     {
-        if ($this->option('file') && ! $this->files->exists($this->argument('content'))) {
-            $this->error('file: ' . $this->argument('content') . ' does not exist');
+        if ($this->option('file') && ! $this->files->exists($input)) {
+            $this->error('file: ' . $input. ' does not exist');
 
             return false;
         }
@@ -87,10 +89,10 @@ class Send extends Command
         return $file;
     }
 
-    protected function getContent()
+    protected function getContent($input)
     {
         return $this->option('file')
-            ? $this->files->get($this->argument('content'))
-            : $this->argument('content');
+            ? $this->files->get($input)
+            : $input;
     }
 }
