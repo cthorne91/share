@@ -16,6 +16,14 @@ class HostsJson implements HostContract
     {
         $this->files = $storage->disk('local');
 
+        if (! $this->files->exists('/.share')) {
+            $this->files->makeDirectory('/.share');
+        }
+
+        if (! $this->files->exists('/.share/hosts')) {
+            $this->files->put('/.share/hosts', '{}');
+        }
+
         $hosts = $this->files->exists(self::HOSTS_FILE)
             ? $this->files->get(self::HOSTS_FILE)
             : '{}';
