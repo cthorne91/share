@@ -13,14 +13,6 @@ class SecretsFiles implements Secrets
     public function __construct(Storage $storage)
     {
         $this->files = $storage->disk('local');
-
-        if (! $this->files->exists('/.share')) {
-            $this->files->makeDirectory('/.share');
-        }
-
-        if (! $this->files->exists('/.share/secrets/')) {
-            $this->files->makeDirectory('/.share/secrets/');
-        }
     }
 
     public function all()
