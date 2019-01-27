@@ -39,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
             $files->makeDirectory($dir);
         });
 
-        $files->put('/.share/hosts', '{}');
+        if (! $files->exists('/.share/hosts')) {
+            $files->put('/.share/hosts', '{}');
+        }
     }
 }
