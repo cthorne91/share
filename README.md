@@ -53,8 +53,6 @@ You can remove a secret by referencing the name to a secret from the `share secr
 
 ## TODO
 - Remove the need for the init command. This really just creates directories that should be created as they are needed as opposed to being created upfront with the init command.
-- Since the inspiration for this project was to send passwords between teammates the `share secret:with` command should not take the secret inline.
-This puts the secret into the shell's history. Instead we should prompt for the secret.
 - All secrets are stored in plane text inside the ~/.share/secrets directory. The files in this directory should be encrypted with a user defined password.
 - We'll also want to have password managment commands like set password and reset password.
 - Fix the `--file` option so that it can accept absolute directory refrences. As of now you must specify a file relative to your current working directory.
