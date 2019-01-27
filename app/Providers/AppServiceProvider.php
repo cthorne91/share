@@ -3,17 +3,24 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected $directories = [
+        '.share',
+        '.share/tmp',
+        '.share/secrets',
+    ];
+
     /**
      * Bootstrap any application services.
      *
      * @return void
      */
-    public function boot()
+    public function boot(Storage $storage)
     {
-        //
+        $this->init($storage->disk('local'));
     }
 
     /**
@@ -24,5 +31,14 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    public function init($files)
+    {
+        collect($this->directories)->each(function ($dir) use ($files) {
+            $files->makeDirectory($dir);
+        });
+
+        $files->put('/.share/hosts', '{}');
     }
 }
