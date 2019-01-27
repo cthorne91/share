@@ -20,12 +20,6 @@ Run
 `php share app:build`
 ./builds/share is the compiled phar file. At the moment, in order for share to work correctly you need to copy that into your `/usr/local/bin/` directory.
 
-## Initialization
-Before using share you will need to execute:
-`share init`
-
-This sets up the nessesary directories. (TODO: Remove the need for this command)
-
 ## Usage
 At any time you can run `share` to see the version of share and all of the commands that share takes.
 
@@ -52,7 +46,6 @@ You can remove a secret by referencing the name to a secret from the `share secr
 `share secrets:remove TheSeecretName`
 
 ## TODO
-- Remove the need for the init command. This really just creates directories that should be created as they are needed as opposed to being created upfront with the init command.
 - All secrets are stored in plane text inside the ~/.share/secrets directory. The files in this directory should be encrypted with a user defined password.
 - We'll also want to have password managment commands like set password and reset password.
 - Fix the `--file` option so that it can accept absolute directory refrences. As of now you must specify a file relative to your current working directory.
