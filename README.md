@@ -14,7 +14,7 @@ Share was inspired by a teammate who asked me to send over a password. I didn't 
 Because Share is built around ssh it will prompt for your teammates computer's password. To avoid this I recommend sharing one another's public keys.
 You can place the contents of your teammates public key into your `~/.ssh/authorized_keys` file. If the file does't already exist, you can create it.
 
-## Instalation
+## Installation 
 Clone the project from github and cd into the directory.
 Run
 `php share app:build`
